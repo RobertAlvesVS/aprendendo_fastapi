@@ -24,3 +24,42 @@ def test_create_user(client):
         'email': 'robert@example.com',
         'username': 'Robert',
     }
+
+
+def test_read_users(client):
+    response = client.get('/users/')
+
+    assert response.status_code == HTTPStatus.OK
+    assert response.json() == {
+        'users': [
+            {'id': 1, 'username': 'Robert', 'email': 'robert@example.com'}
+        ]
+    }
+
+
+def test_update_user(client):
+    response = client.put(
+        '/users/1',
+        json={
+            'username': 'Queli',
+            'email': 'queli@example.com',
+            'password': 'SenhaDoCaramba',
+        },
+    )
+
+    assert response.status_code == HTTPStatus.OK
+    assert response.json() == {
+        'username': 'Queli',
+        'email': 'queli@example.com',
+        'id': 1,
+    }
+
+
+def test_delete_user(client):
+    response = client.delete('/users/1')
+    assert response.status_code == HTTPStatus.OK
+    assert response.json() == {
+        'username': 'Queli',
+        'email': 'queli@example.com',
+        'id': 1,
+    }

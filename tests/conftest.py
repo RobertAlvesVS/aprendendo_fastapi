@@ -53,3 +53,12 @@ def _mock_db_time(*, model, time=datetime(2025, 7, 7)):
 @pytest.fixture
 def mock_db_time():
     return _mock_db_time
+
+
+@pytest.fixture
+def user(session):
+    user = User(username='Teste', email='Teste@test.com', password='testtest')
+    session.add(user)
+    session.commit()
+    session.refresh(user)
+    return user

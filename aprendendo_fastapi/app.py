@@ -17,6 +17,7 @@ from aprendendo_fastapi.schemas import (
 )
 from aprendendo_fastapi.security import (
     create_access_token,
+    get_current_user,
     get_password_hash,
     verify_password,
 )
@@ -66,7 +67,8 @@ def create_user(user: UserSchema, session: Session = Depends(get_session)):
 
 @app.get('/users/', status_code=HTTPStatus.OK, response_model=UserList)
 def read_users(
-    session: Session = Depends(get_session), limit: int = 10, offset: int = 0
+    session: Session = Depends(get_session), limit: int = 10, offset: int = 0,
+    current_user=Depends(get_current_user)
 ):
     users = session.scalars(select(User).limit(limit).offset(offset))
     return {'users': users}
